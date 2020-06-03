@@ -43,14 +43,29 @@ public class MyStepDefs {
     @Then("the user views {string}")
     public void theUserViews(String arg0) {
 
-        String welcomeMessage= wait.until(ExpectedConditions.
+        String welcomeMessage = wait.until(ExpectedConditions.
                 visibilityOfElementLocated(By.xpath("//*[@class='pageSectionHeading']"))).getText();
-       // Assert.assertEquals(arg0,welcomeMessage);
-        Assert.assertEquals("Message passed", arg0, welcomeMessage);
+        Assert.assertEquals(arg0, welcomeMessage);
+        //Assert.assertEquals("Message passed", arg0, welcomeMessage);
 
         // Asagidaki code welcome messagei yazdirmak icin.
 //        String welcomeMessage= wait.until(ExpectedConditions.visibilityOfElementLocated(By.xpath("//*[@class='pageSectionHeading']"))).getText();
 //        System.out.println("welcomeMessage = " + welcomeMessage);
+    }
+
+    @Then("the user views errorMessage {string}")
+    public void theUserViewsErrorMessage(String arg0) {
+        String passwordNeeded = "//li[text()='Password is required']";
+        String usernameNeeded = "//li[text()='Login name is required']";
+        String passwordAndUsernameNeeded = "//*[@class='notificationText notificationText-multiLine']";
+        if (driver.findElement(By.xpath(passwordNeeded)).()){
+            String passwordMessage = driver.findElement(By.xpath(passwordNeeded)).getText();
+            System.out.println("passwordMessage = " + passwordMessage);
+        } else if (driver.findElement(By.xpath(usernameNeeded)).isDisplayed()) {
+            String userNameMessage = driver.findElement(By.xpath(usernameNeeded)).getText();
+            System.out.println("userName = " + userNameMessage);
+        } else
+            System.out.println("not found");
     }
 
     @After
@@ -58,4 +73,6 @@ public class MyStepDefs {
         Thread.sleep(3000);
         driver.quit();
     }
+
+
 }
