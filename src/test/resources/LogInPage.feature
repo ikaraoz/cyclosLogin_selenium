@@ -22,6 +22,16 @@ Feature: CyclosBank login page
       |          |          | Login name is required\nPassword is required                |
 
 
+    Scenario: The user drags and drops an item
+      Given the user navigates to "https://demos.telerik.com/kendo-ui/dragdrop/index"
+      When the user drags the "draggable" to "droptarget"
+      Then the user views "You did great!" message
+
+      Scenario: The user performs slider action
+        Given the user navigates to "http://demoqa.com/slider"
+        When the user slides "range"
+
+
 
 
 
