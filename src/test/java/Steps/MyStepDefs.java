@@ -1,3 +1,6 @@
+package Steps;
+
+import com.sun.glass.ui.Pixels;
 import io.cucumber.java.After;
 import io.cucumber.java.Before;
 import io.cucumber.java.en.And;
@@ -14,11 +17,14 @@ import org.openqa.selenium.interactions.Actions;
 import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.openqa.selenium.support.ui.WebDriverWait;
 
+import static Pages.LogInPage.*;
+
 
 public class MyStepDefs {
 
     WebDriver driver;
     WebDriverWait wait;
+    //  JQuerySliderPage sliderPage;
 
     @Before
     public void driverSetUp() {
@@ -29,17 +35,35 @@ public class MyStepDefs {
 
     @Given("the user navigates to {string}")
     public void theUserNavigatesTo(String arg0) {
-        driver.get(arg0);
-       // driver.findElement(By.xpath("//*[@title='Accept Cookies']")).click();
+        navigates(driver, arg0);
+        // driver.findElement(By.xpath("//*[@title='Accept Cookies']")).click();
 
         //driver.manage().deleteAllCookies();
     }
 
     @When("the user enters {string} to {string}")
     public void theUserEntersTo(String arg0, String arg1) {
+
         wait.until(ExpectedConditions.visibilityOfElementLocated(By.name(arg1))).sendKeys(arg0);
         // Elementing gorunur olmasini beklemek icin wait kullandik.
         // driver.findElement(By.name(arg1)).sendKeys(arg0);
+    }
+
+    @When("the user enters username {string}")
+    public void theUserEntersUsername(String arg0) {
+        enterUserName(wait).sendKeys(arg0);
+    }
+
+    @And("the user enters password {string}")
+    public void theUserEntersPassword(String arg0) {
+        enterPassword(wait).sendKeys(arg0);
+
+    }
+
+
+    @And("the user clicks sign in button")
+    public void theUserClicksSignInButton() {
+        clickSignIn(driver).click();
     }
 
     @And("the user clicks {string}")
@@ -117,12 +141,29 @@ public class MyStepDefs {
 
     @When("the user slides {string}")
     public void theUserSlides(String arg0) throws InterruptedException {
-        WebElement slider= driver.findElement(By.xpath("//*[@type='range']"));
+        WebElement slider = driver.findElement(By.xpath("//*[@type='range']"));
+        Thread.sleep(3000);
+
         Actions actions = new Actions(driver);
-        Thread.sleep(3000);
         driver.manage().window().maximize();
-        actions.clickAndHold(slider).moveByOffset(80, 0).release().perform();
+
+        // actions.clickAndHold(slider).moveByOffset(40, 0).release().perform();
         Thread.sleep(3000);
-        //actions.moveToElement(slider, 56, 0).release().perform();
+//       int pixelsToMove= GetPixelsToMove(slider, 43, 100, 0);
+//        actions.clickAndHold(slider).moveByOffset(0,0)
+//                //.moveByOffset((-(int)slider.getSize().getWidth()/2), 0)
+//                .moveByOffset(pixelsToMove,0).release().perform();
+
     }
+
+    public static int GetPixelsToMove(WebElement slider, double amount, double sliderMax, double sliderMin) {
+        int pixels = 0;
+        double tempPixels = slider.getSize().getWidth();
+        tempPixels = tempPixels / (sliderMax - sliderMin);
+        tempPixels = tempPixels * (amount - sliderMin);
+        pixels = (int) tempPixels;
+        return pixels;
+    }
+
+
 }
